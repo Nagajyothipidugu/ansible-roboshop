@@ -42,7 +42,7 @@
      community.general.npm:
       path: /app 
 
-   - name: copy catalogue service system directory 
+   - name: copy catalogue service to system directory 
      ansible.builtin.copy: 
        src: catalogue.service 
        dest: /etc/systemd/system/catalogue.service   
@@ -61,10 +61,12 @@
      ansible.builtin.copy: 
        src: mongo.repo
        dest: /etc/yum.repos.d/mongo.repo 
+
    - name: install mongodb client 
      ansible.builtin.dnf: 
        name: mongodb-mongosh
-       state: present 
+       state: present
+
    - name: check products loaded or not 
      ansible.builtin.command: mongosh --host mongodb.devaws46.online --eval 'db.getMongo().getDBNames().indexOf("catalogue")' 
      register: catalogue_output 
