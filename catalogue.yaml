@@ -31,9 +31,26 @@
        dest: /tmp/catalogue.zip 
 
    # this module thinks file exist on ansible control server, need to extracts on to remote machine
+   # remote_src: yes.. means file already exists in catalogue server
    - name: Extract catalogue code 
      ansible.builtin.unarchive: 
        src: /tmp/catalogue.zip 
        dest: /app 
        remote_src: yes
+
+   - name: install dependencies 
+     community.general.npm:
+      path: /app 
+   - name: copy catalogue service system directory 
+     ansible.builtin.copy: 
+       src: catalgoue.service 
+       dest: /etc/systemd/system/catalogue.service   
+
+   - name: systemctl daemon reload 
+     ansible.builtin.systemd_service:
+       daemon_reload: true   
+   - name: start and enable catalogue 
+     ansible.builtin.service: 
+      state: started 
+      enabled: yes     
                  
